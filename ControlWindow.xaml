@@ -1,0 +1,12 @@
+﻿<Window x:Class="ScheduleRevealTool.ControlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScheduleRevealTool"
+        mc:Ignorable="d"
+        Title="Schedule Reveal Tool - Controls" Height="357.841" Width="381.55">
+    <Grid>
+        <Button Content="Add Test Run" Click="AddTestRun_Click"/>
+    </Grid>
+</Window>

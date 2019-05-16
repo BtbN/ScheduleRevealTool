@@ -11,5 +11,17 @@
         <Canvas.Background>
             <ImageBrush Stretch="UniformToFill" ImageSource="background.png" />
         </Canvas.Background>
+        <ScrollViewer
+              Canvas.Top="50"
+              Canvas.Left="800"
+              Height="900"
+              Width="1000"
+              VerticalScrollBarVisibility="Hidden"
+              HorizontalScrollBarVisibility="Hidden"
+              Name="MainCardsScroll">
+            <StackPanel Name="MainCardsStack">
+            </StackPanel>
+        </ScrollViewer>
+        <local:RunRevealControl Canvas.Left="40" Canvas.Top="375" x:Name="NextRunControl" />
     </Canvas>
 </Window>

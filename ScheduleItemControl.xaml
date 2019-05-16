@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="ScheduleRevealTool.ScheduleItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ScheduleRevealTool"
+             mc:Ignorable="d"
+             d:DesignHeight="160" d:DesignWidth="1000">
+    <UserControl.Background>
+        <SolidColorBrush Opacity="0.75" Color="#1A2236" />
+    </UserControl.Background>
+    <Grid Width="1000" Height="160">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Foreground="#000000"
+              Grid.Row="0"
+              FontFamily="{StaticResource BarlowMedium}"
+              FontSize="32"
+              Name="TitleLabel"
+              Content="DUMMY CARD:">
+            <Label.Background>
+                <SolidColorBrush Opacity="1.0" Color="#FFBD16" />
+            </Label.Background>
+        </Label>
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+            <Label
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Margin="0,-10,0,0"
+                Foreground="#FFFFFF"
+                FontFamily="{StaticResource BarlowMedium}"
+                FontSize="32"
+                Name="ContentLabelUpper"
+                Content="Metal Gear Dummy: Dummy Ops" />
+            <TextBox
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                VerticalAlignment="Center"
+                BorderThickness="0"
+                IsReadOnly="True"
+                Margin="0,0,0,0"
+                Foreground="#B4B9C5"
+                Background="Transparent"
+                TextWrapping="WrapWithOverflow"
+                FontFamily="{StaticResource BarlowMedium}"
+                FontSize="24"
+                Name="ContentLabelLower"
+                Text="Dummy% / NES / Whoever / EST: 99:99:99" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -2,8 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ScheduleRevealTool"
-             StartupUri="MainWindow.xaml">
+             Startup="Application_Startup">
     <Application.Resources>
-         
+        <FontFamily x:Key="BarlowMedium">pack://application:,,,/Fonts/#Barlow Condensed Medium</FontFamily>
     </Application.Resources>
 </Application>
