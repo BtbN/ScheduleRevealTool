@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ScheduleRevealTool"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
-    <Grid>
-        
-    </Grid>
+        Title="Schedule Reveal Tool"
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Canvas Width="1920" Height="1080">
+        <Canvas.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="background.png" />
+        </Canvas.Background>
+    </Canvas>
 </Window>

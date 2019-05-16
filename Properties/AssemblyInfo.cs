@@ -53,3 +53,6 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// This is designed for exact positioning on a 1080p surface, no scaling!
+[assembly: System.Windows.Media.DisableDpiAwareness]
