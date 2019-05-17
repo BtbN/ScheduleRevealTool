@@ -28,6 +28,13 @@ namespace ScheduleRevealTool
             NextRunControl.Opacity = 0.0;
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            Application.Current.Shutdown();
+        }
+
         private void Delay(TimeSpan delay, Action action)
         {
             Task.Delay(delay).ContinueWith(t => Dispatcher.Invoke(action));
@@ -64,7 +71,7 @@ namespace ScheduleRevealTool
             ctrl.FromRun(NextRunControl.ToRun());
 
             var margin = ctrl.Margin;
-            margin.Bottom = 20;
+            margin.Bottom = 10;
             ctrl.Margin = margin;
 
             ctrl.Opacity = 0.0;

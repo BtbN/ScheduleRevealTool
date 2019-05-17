@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,11 @@ namespace ScheduleRevealTool
             InitializeComponent();
 
             this.mainWindow = mainWindow;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
         }
 
         private void AddTestRun_Click(object sender, RoutedEventArgs e)
