@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ClockTicker.cs" />
+    <Compile Include="OutlinedTextBlock.cs" />
     <Compile Include="Run.cs" />
     <Compile Include="RunRevealControl.xaml.cs">
       <DependentUpon>RunRevealControl.xaml</DependentUpon>

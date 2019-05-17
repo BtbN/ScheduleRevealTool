@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="Schedule Reveal Tool"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <local:ClockTicker x:Key="ClockTicker" />
+        <Style x:Key="BlackShadowStyle" TargetType="{x:Type TextBlock}">
+            <Style.Resources>
+                <DropShadowEffect
+                        x:Key="dropShadowEffect"
+                        ShadowDepth="4"
+                        Direction="320"
+                        Color="Black" 
+                        Opacity="1"
+                        BlurRadius="15"
+                        RenderingBias="Quality" />
+            </Style.Resources>
+            <Setter Property="Effect" Value="{StaticResource dropShadowEffect}" />
+            <Setter Property="FontFamily" Value="{StaticResource BarlowMedium}" />
+            <Setter Property="FontSize" Value="45" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Window.Resources>
     <Canvas Width="1920" Height="1080">
         <Canvas.Background>
             <ImageBrush Stretch="UniformToFill" ImageSource="background.png" />
@@ -22,6 +41,26 @@
             <StackPanel Name="MainCardsStack">
             </StackPanel>
         </ScrollViewer>
-        <local:RunRevealControl Canvas.Left="40" Canvas.Top="375" x:Name="NextRunControl" />
+        <local:RunRevealControl
+            Canvas.Left="40"
+            Canvas.Top="375"
+            x:Name="NextRunControl" />
+        <Viewbox
+            Canvas.Left="1795" Width="125"
+            Canvas.Top="1000" Height="80"
+            StretchDirection="DownOnly" Stretch="Uniform">
+            <TextBlock
+                Text="{Binding Source={StaticResource ClockTicker}, Path=Now, Mode=OneWay, StringFormat='HH:mm'}"
+                Style="{StaticResource BlackShadowStyle}" />
+        </Viewbox>
+        <Viewbox
+            Canvas.Top="1000" Height="80"
+            Canvas.Left="412" Width="1377"
+            StretchDirection="DownOnly" Stretch="Uniform">
+            <TextBlock
+                Name="OmnibarTextBox"
+                Style="{StaticResource BlackShadowStyle}">
+            </TextBlock>
+        </Viewbox>
     </Canvas>
 </Window>

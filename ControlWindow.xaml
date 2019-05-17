@@ -29,6 +29,10 @@
                 <TextBox MinWidth="25" HorizontalContentAlignment="Right" Text="0" Name="TimerInputText" PreviewTextInput="PreviewNumericEnforce" TextChanged="TimerInputText_TextChanged" />
                 <Label Name="TimerStatusLabel">Stopped</Label>
             </StackPanel>
+            <DockPanel LastChildFill="True">
+                <Label>Omnibar Text:</Label>
+                <TextBox Name="OmnibarTextBox" KeyUp="OmnibarTextBox_KeyUp" />
+            </DockPanel>
         </StackPanel>
     </Grid>
 </Window>

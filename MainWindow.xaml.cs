@@ -157,5 +157,20 @@ namespace ScheduleRevealTool
             NextRunControl.BeginAnimation(OpacityProperty, fadeOutRun);
             MainCardsScroll.BeginAnimation(OpacityProperty, fadeOutList);
         }
+
+        internal void UpdateOmniBar(string text, double speedMul = 1.0)
+        {
+            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(2500 * speedMul));
+            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2500 * speedMul));
+            fadeOut.Completed += (s, e) =>
+            {
+                OmnibarTextBox.Text = text;
+
+                Delay(1000 * speedMul, () => {
+                    OmnibarTextBox.BeginAnimation(OpacityProperty, fadeIn);
+                });
+            };
+            OmnibarTextBox.BeginAnimation(OpacityProperty, fadeOut);
+        }
     }
 }

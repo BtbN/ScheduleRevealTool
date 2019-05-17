@@ -150,5 +150,14 @@ namespace ScheduleRevealTool
                 }
             }
         }
+
+        private void OmnibarTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                mainWindow.UpdateOmniBar(OmnibarTextBox.Text);
+            }
+        }
     }
 }
