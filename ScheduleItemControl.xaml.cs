@@ -92,9 +92,9 @@ namespace ScheduleRevealTool
 
         public void Clear()
         {
-            TitleLabel.Content = "";
-            ContentLabelUpper.Content = "";
-            ContentLabelLower.Clear();
+            TitleText.Clear();
+            GameNameText.Clear();
+            GameMetaText.Clear();
 
             if (curRun != null)
             {
@@ -167,9 +167,9 @@ namespace ScheduleRevealTool
 
         private void UpdateTexts()
         {
-            TitleLabel.Content = time;
-            ContentLabelUpper.Content = game;
-            ContentLabelLower.Text = category + " / " + platform + " / " + runners + " / EST: " + estimate;
+            TitleText.Text = time;
+            GameNameText.Text = game;
+            GameMetaText.Text = category + " / " + platform + " / " + runners + " / EST: " + estimate;
         }
     }
 }

@@ -5,53 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ScheduleRevealTool"
              mc:Ignorable="d"
-             d:DesignHeight="80" d:DesignWidth="1000">
+             d:DesignHeight="30" d:DesignWidth="1000">
     <UserControl.Background>
         <SolidColorBrush Opacity="0.75" Color="#1A2236" />
     </UserControl.Background>
-    <Grid Width="1000" Height="80">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Border Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" BorderThickness="1" BorderBrush="Black"  />
-        <Label
-              HorizontalContentAlignment="Center"
-              VerticalContentAlignment="Center"
-              Foreground="#000000"
-              Grid.Row="0"
-              FontFamily="{StaticResource BarlowMedium}"
-              FontSize="18"
-              Name="TitleLabel"
-              Content="DUMMY CARD:">
-            <Label.Background>
-                <SolidColorBrush Opacity="1.0" Color="#FFBD16" />
-            </Label.Background>
-        </Label>
-        <StackPanel Grid.Row="1" VerticalAlignment="Center">
-            <Label
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                Margin="0,0,0,0"
-                Foreground="#FFFFFF"
-                FontFamily="{StaticResource BarlowMedium}"
-                FontSize="22"
-                Name="ContentLabelUpper"
-                Content="Metal Gear Dummy: Dummy Ops" />
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="{StaticResource BarlowMedium}" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        </Style>
+    </UserControl.Resources>
+    <Grid Width="1000" Height="30">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180" />
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Canvas Grid.Column="0" Background="#FFBD16" />
+        <Viewbox StretchDirection="DownOnly" Stretch="Uniform" Grid.Column="0" HorizontalAlignment="Center">
             <TextBox
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
+                Foreground="#000000"
+                Grid.Column="0"
+                Margin="0,0,0,2"
+                Name="TitleText"
+                Text="DUMMY CARD:" />
+        </Viewbox>
+        <Viewbox StretchDirection="DownOnly" Stretch="Uniform" Grid.Column="1" HorizontalAlignment="Left">
+            <TextBox
+                HorizontalContentAlignment="Left"
+                HorizontalAlignment="Left"
+                VerticalContentAlignment="Center"
+                Margin="7,0,7,2"
+                Foreground="#FFFFFF"
+                Name="GameNameText"
+                Text="Metal Gear Dummy: Dummy Ops" />
+        </Viewbox>
+        <Viewbox StretchDirection="DownOnly" Stretch="Uniform" Grid.Column="2" HorizontalAlignment="Right">
+            <TextBox
+                HorizontalContentAlignment="Right"
+                VerticalContentAlignment="Center"
                 VerticalAlignment="Center"
                 BorderThickness="0"
-                IsReadOnly="True"
-                Margin="0,-10,0,10"
+                Margin="7,0,7,2"
                 Foreground="#B4B9C5"
-                Background="Transparent"
-                TextWrapping="WrapWithOverflow"
-                FontFamily="{StaticResource BarlowMedium}"
-                FontSize="20"
-                Name="ContentLabelLower"
+                Name="GameMetaText"
                 Text="Dummy% / NES / Whoever / EST: 99:99:99" />
-        </StackPanel>
+        </Viewbox>
+        <Border Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="Black" />
     </Grid>
 </UserControl>

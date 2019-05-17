@@ -14,7 +14,7 @@
         <ScrollViewer
               Canvas.Top="50"
               Canvas.Left="800"
-              Height="900"
+              Height="910"
               Width="1000"
               VerticalScrollBarVisibility="Hidden"
               HorizontalScrollBarVisibility="Hidden"

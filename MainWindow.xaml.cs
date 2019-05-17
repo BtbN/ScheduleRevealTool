@@ -78,7 +78,7 @@ namespace ScheduleRevealTool
             ctrl.FromRun(NextRunControl.ToRun());
 
             var margin = ctrl.Margin;
-            margin.Bottom = 10;
+            margin.Bottom = 5;
             ctrl.Margin = margin;
 
             ctrl.Opacity = 0.0;
