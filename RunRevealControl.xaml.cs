@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace ScheduleRevealTool
 {
@@ -87,6 +88,8 @@ namespace ScheduleRevealTool
             }
         }
 
+        private Run curRun = null;
+
         public void Clear()
         {
             GameText.Clear();
@@ -95,6 +98,12 @@ namespace ScheduleRevealTool
             PlatformText.Clear();
             EstimateText.Clear();
             TimeText.Clear();
+
+            if (curRun != null)
+            {
+                curRun.PropertyChanged -= Run_PropertyChanged;
+                curRun = null;
+            }
         }
 
         public void FromRun(Run run)
@@ -105,10 +114,47 @@ namespace ScheduleRevealTool
             Platform = run.Platform;
             Estimate = run.Estimate;
             Time = run.Time;
+
+            if (curRun != null)
+                curRun.PropertyChanged -= Run_PropertyChanged;
+            curRun = run;
+            curRun.PropertyChanged += Run_PropertyChanged;
+        }
+
+        private void Run_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Run run = (Run)sender;
+
+            switch (e.PropertyName)
+            {
+                case "Game":
+                    Game = run.Game;
+                    break;
+                case "Category":
+                    Category = run.Category;
+                    break;
+                case "Runners":
+                    Runners = run.Runners;
+                    break;
+                case "Platform":
+                    Platform = run.Platform;
+                    break;
+                case "Estimate":
+                    Game = run.Estimate;
+                    break;
+                case "Time":
+                    Game = run.Time;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public Run ToRun()
         {
+            if (curRun != null)
+                return curRun;
+
             return new Run
             {
                 Game = Game,

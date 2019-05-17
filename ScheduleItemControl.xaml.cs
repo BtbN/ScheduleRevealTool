@@ -88,6 +88,21 @@ namespace ScheduleRevealTool
             }
         }
 
+        private Run curRun = null;
+
+        public void Clear()
+        {
+            TitleLabel.Content = "";
+            ContentLabelUpper.Content = "";
+            ContentLabelLower.Clear();
+
+            if (curRun != null)
+            {
+                curRun.PropertyChanged -= Run_PropertyChanged;
+                curRun = null;
+            }
+        }
+
         public void FromRun(Run run)
         {
             game = run.Game;
@@ -98,10 +113,47 @@ namespace ScheduleRevealTool
             time = run.Time;
 
             UpdateTexts();
+
+            if (curRun != null)
+                curRun.PropertyChanged -= Run_PropertyChanged;
+            curRun = run;
+            curRun.PropertyChanged += Run_PropertyChanged;
+        }
+
+        private void Run_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Run run = (Run)sender;
+
+            switch (e.PropertyName)
+            {
+                case "Game":
+                    Game = run.Game;
+                    break;
+                case "Category":
+                    Category = run.Category;
+                    break;
+                case "Runners":
+                    Runners = run.Runners;
+                    break;
+                case "Platform":
+                    Platform = run.Platform;
+                    break;
+                case "Estimate":
+                    Game = run.Estimate;
+                    break;
+                case "Time":
+                    Game = run.Time;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public Run ToRun()
         {
+            if (curRun != null)
+                return curRun;
+
             return new Run
             {
                 Game = game,

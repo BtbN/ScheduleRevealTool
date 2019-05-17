@@ -40,12 +40,19 @@ namespace ScheduleRevealTool
             Task.Delay(delay).ContinueWith(t => Dispatcher.Invoke(action));
         }
 
-        private void Delay(int delayMs, Action action)
+        private void Delay(double delayMs, Action action)
         {
             Delay(TimeSpan.FromMilliseconds(delayMs), action);
         }
 
-        private static readonly DependencyProperty ScrollOffsetProperty = DependencyProperty.Register("ScrollOffset", typeof(double), typeof(MainWindow), new FrameworkPropertyMetadata(0.0, new PropertyChangedCallback(OnScrollOffsetChanged)));
+        private static readonly DependencyProperty ScrollOffsetProperty
+            = DependencyProperty.Register(
+                "ScrollOffset",
+                typeof(double),
+                typeof(MainWindow),
+                new FrameworkPropertyMetadata(
+                    0.0,
+                    new PropertyChangedCallback(OnScrollOffsetChanged)));
 
         public double ScrollOffset
         {
@@ -62,7 +69,7 @@ namespace ScheduleRevealTool
             win.MainCardsScroll.ScrollToVerticalOffset((double)args.NewValue);
         }
 
-        private void AddRunToList(Run run)
+        private void AddRunToList(Run run, double speedMul = 1.0)
         {
             if (run.Game == "")
                 return;
@@ -79,10 +86,10 @@ namespace ScheduleRevealTool
             MainCardsStack.Children.Add(ctrl);
             UpdateLayout();
 
-            DoubleAnimation scrollDown = new DoubleAnimation(MainCardsScroll.VerticalOffset, MainCardsScroll.ScrollableHeight, TimeSpan.FromMilliseconds(2000));
+            DoubleAnimation scrollDown = new DoubleAnimation(MainCardsScroll.VerticalOffset, MainCardsScroll.ScrollableHeight, TimeSpan.FromMilliseconds(2000 * speedMul));
             scrollDown.Completed += (s, e) =>
             {
-                DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000));
+                DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
                 ctrl.BeginAnimation(OpacityProperty, fadeIn);
             };
 
@@ -91,7 +98,7 @@ namespace ScheduleRevealTool
 
         bool inProgress = false;
 
-        public bool RevealNextRun(Run run)
+        public bool RevealNextRun(Run run, double speedMul = 1.0)
         {
             if (inProgress)
                 return false;
@@ -99,14 +106,14 @@ namespace ScheduleRevealTool
 
             Run prevRun = NextRunControl.ToRun();
 
-            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(1500));
-            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(1500));
+            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(1500 * speedMul));
+            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(1500 * speedMul));
             fadeOut.Completed += (s, e) =>
             {
-                AddRunToList(prevRun);
+                AddRunToList(prevRun, speedMul);
                 NextRunControl.FromRun(run);
 
-                Delay(5000, () => {
+                Delay(5000 * speedMul, () => {
                     NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
                     inProgress = false;
                 });
@@ -118,10 +125,34 @@ namespace ScheduleRevealTool
 
         public bool RevealNextRunNow(Run run)
         {
-            if (inProgress)
-                return false;
+            return RevealNextRun(run, 0.0);
+        }
 
-            return true;
+        public void Clear()
+        {
+            inProgress = true;
+
+            DoubleAnimation fadeOutRun = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(1000));
+            DoubleAnimation fadeOutList = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(1000));
+
+            fadeOutRun.Completed += (s, e) =>
+            {
+                NextRunControl.Clear();
+                inProgress = false;
+            };
+
+            fadeOutList.Completed += (s, e) =>
+            {
+                MainCardsStack.Children.Clear();
+                UpdateLayout();
+                MainCardsScroll.ScrollToTop();
+
+                MainCardsScroll.BeginAnimation(OpacityProperty, null);
+                MainCardsScroll.Opacity = 1.0;
+            };
+
+            NextRunControl.BeginAnimation(OpacityProperty, fadeOutRun);
+            MainCardsScroll.BeginAnimation(OpacityProperty, fadeOutList);
         }
     }
 }
