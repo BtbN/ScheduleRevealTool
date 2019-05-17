@@ -76,11 +76,14 @@ namespace ScheduleRevealTool
                     Time = elements[0].Trim(),
                     Runners = elements[1].Trim(),
                     Game = elements[2].Trim(),
-                    Category = (elements[3] + " " + elements[4]).Trim(),
-                    Estimate = elements[5],
-                    Platform = elements[6],
+                    Category = elements[3].Trim(),
+                    Estimate = elements[5].Trim(),
+                    Platform = elements[6].Trim(),
                     Presented = false
                 };
+
+                if (elements[4].Trim() != "")
+                    run.Category += " (" + elements[4].Trim() + ")";
 
                 if (run.Game == "")
                     continue;

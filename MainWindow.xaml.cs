@@ -87,10 +87,13 @@ namespace ScheduleRevealTool
             UpdateLayout();
 
             DoubleAnimation scrollDown = new DoubleAnimation(MainCardsScroll.VerticalOffset, MainCardsScroll.ScrollableHeight, TimeSpan.FromMilliseconds(2000 * speedMul));
+            scrollDown.EasingFunction = new BounceEase { EasingMode = EasingMode.EaseOut };
             scrollDown.Completed += (s, e) =>
             {
-                DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
-                ctrl.BeginAnimation(OpacityProperty, fadeIn);
+                Delay(500, () => {
+                    DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
+                    ctrl.BeginAnimation(OpacityProperty, fadeIn);
+                });
             };
 
             BeginAnimation(ScrollOffsetProperty, scrollDown);
