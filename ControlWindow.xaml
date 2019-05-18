@@ -7,13 +7,32 @@
         mc:Ignorable="d"
         Title="Schedule Reveal Tool - Controls" Height="900" Width="1000"
         x:Name="ControlWindowRoot">
+    <Window.Resources>
+        <Style x:Key="SeparatorStyle" TargetType="{x:Type Border}">
+            <Setter Property="BorderThickness" Value="1,0,0,0"/>
+            <Setter Property="BorderBrush" Value="#FFC5C5C5"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
+            <Setter Property="Width" Value="2"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <DockPanel Grid.Row="0" Grid.Column="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Load Schedule" Click="LoadSchedule_Click" />
+                    <Separator />
+                    <MenuItem Header="_Exit" Click="MenuItem_Click" />
+                </MenuItem>
+            </Menu>
+        </DockPanel>
         <DataGrid
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="0"
             Name="RunDataGrid"
             ItemsSource="{Binding RunCollection, ElementName=ControlWindowRoot, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -21,13 +40,26 @@
             CanUserAddRows="False"
             CanUserSortColumns="False"
             AutoGenerateColumns="True" />
-        <StackPanel Grid.Row="1" Grid.Column="0">
-            <Button Click="LoadSchedule_Click" Content="Load Schedule .tsv..."/>
+        <StackPanel Grid.Row="2" Grid.Column="0">
             <Button Click="PresentNextRun_Click" Content="Present Next Run" />
             <StackPanel Orientation="Horizontal">
                 <Label>Timer:</Label>
-                <TextBox MinWidth="25" HorizontalContentAlignment="Right" Text="0" Name="TimerInputText" PreviewTextInput="PreviewNumericEnforce" TextChanged="TimerInputText_TextChanged" />
+                <TextBox MinWidth="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="0" Name="TimerInputText" PreviewTextInput="PreviewIntegerEnforce" TextChanged="TimerInputText_TextChanged" />
                 <Label Name="TimerStatusLabel">Stopped</Label>
+                <Button Click="StopTimer_Click">Stop</Button>
+
+                <Border Style="{StaticResource SeparatorStyle}" />
+
+                <Label>Animation Speed:</Label>
+                <TextBox MinWidth="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="1" Name="SpeedInputText" PreviewTextInput="PreviewDoubleEnforce" TextChanged="SpeedInputText_TextChanged" />
+
+                <Border Style="{StaticResource SeparatorStyle}" />
+
+                <Button Click="ScrollOverList_Click">Scroll over List</Button>
+                <Label>Duration:</Label>
+                <TextBox MinWidth="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="120" Name="ScrollDurationText" PreviewTextInput="PreviewIntegerEnforce" />
+
+                <Border Style="{StaticResource SeparatorStyle}" />
             </StackPanel>
             <DockPanel LastChildFill="True">
                 <Label>Omnibar Text:</Label>

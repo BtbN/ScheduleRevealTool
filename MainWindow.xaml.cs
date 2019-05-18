@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,6 @@ using System.Windows.Shapes;
 
 namespace ScheduleRevealTool
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -28,11 +26,9 @@ namespace ScheduleRevealTool
             NextRunControl.Opacity = 0.0;
         }
 
-        protected override void OnClosed(EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            base.OnClosed(e);
-
-            Application.Current.Shutdown();
+            e.Cancel = true;
         }
 
         private void Delay(TimeSpan delay, Action action)
@@ -69,9 +65,27 @@ namespace ScheduleRevealTool
             win.MainCardsScroll.ScrollToVerticalOffset((double)args.NewValue);
         }
 
-        private void AddRunToList(Run run, double speedMul = 1.0)
+        public void ScrollOverList(double durationSec = 30.0, double pauseSec = 5.0)
         {
-            if (run.Game == "")
+            DoubleAnimation scrollUp = new DoubleAnimation(MainCardsScroll.VerticalOffset, 0.0, TimeSpan.FromSeconds(durationSec / 2));
+            scrollUp.Completed += (s, e) =>
+            {
+                Delay(pauseSec * 1000, () =>
+                {
+                    DoubleAnimation scrollDown = new DoubleAnimation(0.0, MainCardsScroll.ScrollableHeight, TimeSpan.FromSeconds(durationSec / 2));
+                    BeginAnimation(ScrollOffsetProperty, scrollDown);
+                });
+            };
+
+            BeginAnimation(ScrollOffsetProperty, scrollUp);
+        }
+
+        public void AddRunToList(Run run, double speedMul = 1.0)
+        {
+            if (speedMul < 0.01)
+                speedMul = 0.01;
+
+            if (run == null || run.Game == "")
                 return;
 
             ScheduleItemControl ctrl = new ScheduleItemControl();
@@ -103,6 +117,9 @@ namespace ScheduleRevealTool
 
         public bool RevealNextRun(Run run, double speedMul = 1.0)
         {
+            if (speedMul < 0.01)
+                speedMul = 0.01;
+
             if (inProgress)
                 return false;
             inProgress = true;
@@ -114,21 +131,26 @@ namespace ScheduleRevealTool
             fadeOut.Completed += (s, e) =>
             {
                 AddRunToList(prevRun, speedMul);
-                NextRunControl.FromRun(run);
 
-                Delay(5000 * speedMul, () => {
-                    NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
+                if (run == null || run.Game == "")
+                {
                     inProgress = false;
-                });
+                    NextRunControl.Clear();
+                }
+                else
+                {
+                    NextRunControl.FromRun(run);
+
+                    Delay(5000 * speedMul, () =>
+                    {
+                        NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
+                        inProgress = false;
+                    });
+                }
             };
             NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
 
             return true;
-        }
-
-        public bool RevealNextRunNow(Run run)
-        {
-            return RevealNextRun(run, 0.0);
         }
 
         public void Clear()

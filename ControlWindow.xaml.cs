@@ -26,7 +26,7 @@ namespace ScheduleRevealTool
     {
         private readonly MainWindow mainWindow;
 
-        private DispatcherTimer timer = new DispatcherTimer();
+        private readonly DispatcherTimer timer = new DispatcherTimer();
 
         public ControlWindow(MainWindow mainWindow)
         {
@@ -46,7 +46,11 @@ namespace ScheduleRevealTool
 
         private void LoadSchedule_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog();
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Tab Seperated Values|*.tsv"
+            };
+
             bool? res = dialog.ShowDialog();
 
             if (res != true)
@@ -105,10 +109,16 @@ namespace ScheduleRevealTool
             RevealNextRun();
         }
 
-        private void PreviewNumericEnforce(object sender, TextCompositionEventArgs e)
+        private void PreviewIntegerEnforce(object sender, TextCompositionEventArgs e)
         {
             TextBox tb = (TextBox)sender;
             e.Handled = !int.TryParse(tb.Text + e.Text, out int _);
+        }
+
+        private void PreviewDoubleEnforce(object sender, TextCompositionEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            e.Handled = !double.TryParse(tb.Text + e.Text, out double _);
         }
 
         private void TimerInputText_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,19 +128,32 @@ namespace ScheduleRevealTool
 
             string txt = TimerInputText.Text;
 
-            if (txt == "" || txt == "0")
+            if (txt == "" || txt == "0" || !int.TryParse(txt, out int interval))
             {
                 timer.Stop();
                 TimerStatusLabel.Content = "Stopped";
             }
             else
             {
-                int interval = int.Parse(txt);
                 TimerStatusLabel.Content = "Running every " + interval + "s";
                 timer.Stop();
                 timer.Interval = TimeSpan.FromSeconds(interval);
                 timer.Start();
             }
+        }
+
+        private double SpeedMul { get; set; } = 1.0;
+
+        private void SpeedInputText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (double.TryParse(SpeedInputText.Text, out double speed))
+                SpeedMul = speed;
+            else
+                SpeedMul = 1.0;
+
+            // Safety, someone puts in 100, and it will take forever to be ready again.
+            if (SpeedMul > 2.0)
+                SpeedMul = 2.0;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -144,11 +167,15 @@ namespace ScheduleRevealTool
             {
                 if (!run.Presented)
                 {
-                    if (mainWindow.RevealNextRun(run))
+                    if (mainWindow.RevealNextRun(run, SpeedMul))
                         run.Presented = true;
                     return;
                 }
             }
+
+            mainWindow.RevealNextRun(null, SpeedMul);
+            TimerStatusLabel.Content = "Finished";
+            timer.Stop();
         }
 
         private void OmnibarTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -158,6 +185,26 @@ namespace ScheduleRevealTool
                 e.Handled = true;
                 mainWindow.UpdateOmniBar(OmnibarTextBox.Text);
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Really Exit?", "Exit?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                Application.Current.Shutdown();
+        }
+
+        private void ScrollOverList_Click(object sender, RoutedEventArgs e)
+        {
+            if (!double.TryParse(ScrollDurationText.Text, out double duration))
+                duration = 120.0;
+
+            mainWindow.ScrollOverList(duration, 5.0);
+        }
+
+        private void StopTimer_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            TimerStatusLabel.Content = "Stopped";
         }
     }
 }
