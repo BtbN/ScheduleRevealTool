@@ -63,7 +63,7 @@
             </StackPanel>
             <DockPanel LastChildFill="True">
                 <Label>Omnibar Text:</Label>
-                <TextBox Name="OmnibarTextBox" KeyUp="OmnibarTextBox_KeyUp" />
+                <TextBox VerticalContentAlignment="Center" Name="OmnibarTextBox" KeyUp="OmnibarTextBox_KeyUp" />
             </DockPanel>
         </StackPanel>
     </Grid>

@@ -19,6 +19,7 @@
             <Setter Property="FontSize" Value="24" />
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <Setter Property="Margin" Value="3,0,0,0" />
         </Style>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="#B4B9C5" />

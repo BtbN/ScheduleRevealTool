@@ -124,14 +124,12 @@ namespace ScheduleRevealTool
                 return false;
             inProgress = true;
 
-            Run prevRun = NextRunControl.ToRun();
+            AddRunToList(NextRunControl.ToRun(), speedMul);
 
-            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(1500 * speedMul));
-            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(1500 * speedMul));
+            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(2000 * speedMul));
+            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
             fadeOut.Completed += (s, e) =>
             {
-                AddRunToList(prevRun, speedMul);
-
                 if (run == null || run.Game == "")
                 {
                     inProgress = false;
@@ -141,14 +139,18 @@ namespace ScheduleRevealTool
                 {
                     NextRunControl.FromRun(run);
 
-                    Delay(5000 * speedMul, () =>
+                    Delay(2500 * speedMul, () =>
                     {
                         NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
                         inProgress = false;
                     });
                 }
             };
-            NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
+
+            Delay(2000 * speedMul, () =>
+            {
+                NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
+            });
 
             return true;
         }
@@ -188,7 +190,7 @@ namespace ScheduleRevealTool
             {
                 OmnibarTextBox.Text = text;
 
-                Delay(1000 * speedMul, () => {
+                Delay(2500 * speedMul, () => {
                     OmnibarTextBox.BeginAnimation(OpacityProperty, fadeIn);
                 });
             };
