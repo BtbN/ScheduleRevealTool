@@ -62,5 +62,17 @@
                 Style="{StaticResource BlackShadowStyle}">
             </TextBlock>
         </Viewbox>
+        <Viewbox
+            Name="CountdownViewBox"
+            Canvas.Top="350" Height="325"
+            Canvas.Left="1000" Width="500"
+            HorizontalAlignment="Left"
+            StretchDirection="DownOnly" Stretch="Uniform">
+            <TextBlock
+                Name="CountdownTextBox"
+                Style="{StaticResource BlackShadowStyle}"
+                FontSize="220"
+                Text="15:00"/>
+        </Viewbox>
     </Canvas>
 </Window>

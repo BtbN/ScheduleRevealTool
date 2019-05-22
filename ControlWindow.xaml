@@ -60,6 +60,10 @@
                 <TextBox MinWidth="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="120" Name="ScrollDurationText" PreviewTextInput="PreviewIntegerEnforce" />
 
                 <Border Style="{StaticResource SeparatorStyle}" />
+
+                <Label>Countdown:</Label>
+                <TextBox MinWidth="40" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Text="900" Name="CountdownTimerText" PreviewTextInput="PreviewIntegerEnforce" />
+                <Button Click="StartCountdown_Click">Start</Button>
             </StackPanel>
             <DockPanel LastChildFill="True">
                 <Label>Omnibar Text:</Label>

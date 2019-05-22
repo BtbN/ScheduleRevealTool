@@ -14,16 +14,27 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ScheduleRevealTool
 {
     public partial class MainWindow : Window
     {
+        private DispatcherTimer countdownTimer;
+        private DateTime countdownEnd = DateTime.Now;
+
         public MainWindow()
         {
             InitializeComponent();
 
             NextRunControl.Opacity = 0.0;
+            CountdownViewBox.Opacity = 0.0;
+
+            countdownTimer = new DispatcherTimer(
+                TimeSpan.FromMilliseconds(100),
+                DispatcherPriority.Render,
+                CountdownTimer_Tick,
+                Application.Current.Dispatcher);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -182,7 +193,7 @@ namespace ScheduleRevealTool
             MainCardsScroll.BeginAnimation(OpacityProperty, fadeOutList);
         }
 
-        internal void UpdateOmniBar(string text, double speedMul = 1.0)
+        public void UpdateOmniBar(string text, double speedMul = 1.0)
         {
             DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(2500 * speedMul));
             DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2500 * speedMul));
@@ -195,6 +206,40 @@ namespace ScheduleRevealTool
                 });
             };
             OmnibarTextBox.BeginAnimation(OpacityProperty, fadeOut);
+        }
+
+        public void SetCountdown(double seconds)
+        {
+            countdownTimer.Stop();
+
+            countdownEnd = DateTime.Now.AddSeconds(seconds);
+            CountdownTimer_Tick(null, null);
+
+            DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2500));
+            fadeIn.Completed += (s, e) =>
+            {
+                countdownEnd = DateTime.Now.AddSeconds(seconds);
+                countdownTimer.Start();
+            };
+
+            CountdownViewBox.BeginAnimation(OpacityProperty, fadeIn);
+        }
+
+        private void CountdownTimer_Tick(object sender, EventArgs e)
+        {
+            TimeSpan diff = countdownEnd - DateTime.Now;
+
+            if (diff.TotalMilliseconds <= 0)
+            {
+                countdownTimer.Stop();
+
+                DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(2500));
+                CountdownViewBox.BeginAnimation(OpacityProperty, fadeOut);
+
+                return;
+            }
+
+            CountdownTextBox.Text = Math.Floor(diff.TotalMinutes).ToString("00") + ":" + diff.Seconds.ToString("00");
         }
     }
 }

@@ -206,5 +206,14 @@ namespace ScheduleRevealTool
             timer.Stop();
             TimerStatusLabel.Content = "Stopped";
         }
+
+        private void StartCountdown_Click(object sender, RoutedEventArgs e)
+        {
+            double v = 0.0;
+            if (CountdownTimerText.Text != "")
+                v = double.Parse(CountdownTimerText.Text);
+
+            mainWindow.SetCountdown(v);
+        }
     }
 }
