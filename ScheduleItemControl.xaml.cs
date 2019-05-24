@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -92,19 +94,33 @@ namespace ScheduleRevealTool
 
         public void Clear()
         {
+            game = "";
+            category = "";
+            runners = "";
+            platform = "";
+            estimate = "";
+            time = "";
+
             TitleText.Clear();
             GameNameText.Clear();
             GameMetaText.Clear();
 
             if (curRun != null)
             {
-                curRun.PropertyChanged -= Run_PropertyChanged;
+                WeakEventManager<Run, PropertyChangedEventArgs>.RemoveHandler(curRun, "PropertyChanged", Run_PropertyChanged);
                 curRun = null;
             }
         }
 
         public void FromRun(Run run)
         {
+            Clear();
+
+            if (run == null)
+                return;
+
+            curRun = run;
+
             game = run.Game;
             category = run.Category;
             runners = run.Runners;
@@ -114,13 +130,10 @@ namespace ScheduleRevealTool
 
             UpdateTexts();
 
-            if (curRun != null)
-                curRun.PropertyChanged -= Run_PropertyChanged;
-            curRun = run;
-            curRun.PropertyChanged += Run_PropertyChanged;
+            WeakEventManager<Run, PropertyChangedEventArgs>.AddHandler(curRun, "PropertyChanged", Run_PropertyChanged);
         }
 
-        private void Run_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Run_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Run run = (Run)sender;
 
@@ -144,9 +157,24 @@ namespace ScheduleRevealTool
                 case "Time":
                     Game = run.Time;
                     break;
+                case "Presented":
+                    if (!run.Presented)
+                        Unpresent();
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void Unpresent()
+        {
+            Panel parent = Parent as Panel;
+            if (parent == null)
+                return;
+
+            DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(250));
+            fadeOut.Completed += (s, e) => parent.Children.Remove(this);
+            BeginAnimation(OpacityProperty, fadeOut);
         }
 
         public Run ToRun()

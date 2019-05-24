@@ -115,10 +115,9 @@ namespace ScheduleRevealTool
             scrollDown.EasingFunction = new BounceEase { EasingMode = EasingMode.EaseOut };
             scrollDown.Completed += (s, e) =>
             {
-                Delay(500, () => {
-                    DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
-                    ctrl.BeginAnimation(OpacityProperty, fadeIn);
-                });
+                DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
+                fadeIn.BeginTime = TimeSpan.FromMilliseconds(500 * speedMul);
+                ctrl.BeginAnimation(OpacityProperty, fadeIn);
             };
 
             BeginAnimation(ScrollOffsetProperty, scrollDown);
@@ -135,10 +134,20 @@ namespace ScheduleRevealTool
                 return false;
             inProgress = true;
 
-            AddRunToList(NextRunControl.ToRun(), speedMul);
+            Run prevRun = NextRunControl.ToRun();
+            if (prevRun != null && prevRun.Game != "")
+            {
+                prevRun.PropertyChanged -= CurRunPropChanged;
+                AddRunToList(prevRun, speedMul);
+            }
+
+            if (run != null && run.Game != "")
+                run.PropertyChanged += CurRunPropChanged;
 
             DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(2000 * speedMul));
             DoubleAnimation fadeIn = new DoubleAnimation(1.0, TimeSpan.FromMilliseconds(2000 * speedMul));
+            fadeIn.BeginTime = TimeSpan.FromMilliseconds(2500 * speedMul);
+            fadeOut.BeginTime = TimeSpan.FromMilliseconds(2000 * speedMul);
             fadeOut.Completed += (s, e) =>
             {
                 if (run == null || run.Game == "")
@@ -150,20 +159,33 @@ namespace ScheduleRevealTool
                 {
                     NextRunControl.FromRun(run);
 
-                    Delay(2500 * speedMul, () =>
-                    {
-                        NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
-                        inProgress = false;
-                    });
+                    NextRunControl.BeginAnimation(OpacityProperty, fadeIn);
+                    inProgress = false;
                 }
             };
 
-            Delay(2000 * speedMul, () =>
-            {
-                NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
-            });
+            NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
 
             return true;
+        }
+
+        private void CurRunPropChanged(object sender, PropertyChangedEventArgs _)
+        {
+            Run run = (Run)sender;
+            if (!run.Presented)
+            {
+                run.PropertyChanged -= CurRunPropChanged;
+
+                inProgress = true;
+
+                DoubleAnimation fadeOut = new DoubleAnimation(0.0, TimeSpan.FromMilliseconds(250));
+                fadeOut.Completed += (s, e) =>
+                {
+                    inProgress = false;
+                    NextRunControl.Clear();
+                };
+                NextRunControl.BeginAnimation(OpacityProperty, fadeOut);
+            }
         }
 
         public void Clear()
