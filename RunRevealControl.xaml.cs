@@ -140,10 +140,10 @@ namespace ScheduleRevealTool
                     Platform = run.Platform;
                     break;
                 case "Estimate":
-                    Game = run.Estimate;
+                    Estimate = run.Estimate;
                     break;
                 case "Time":
-                    Game = run.Time;
+                    Time = run.Time;
                     break;
                 default:
                     break;
