@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -147,7 +147,7 @@ namespace ScheduleRevealTool
         private void SpeedInputText_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (double.TryParse(SpeedInputText.Text, out double speed))
-                SpeedMul = speed;
+                SpeedMul = 1.0 / speed;
             else
                 SpeedMul = 1.0;
 

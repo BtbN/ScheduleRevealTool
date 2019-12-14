@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="325" d:DesignWidth="625">
     <UserControl.Background>
-        <SolidColorBrush Opacity="0.75" Color="#1A2236" />
+        <SolidColorBrush Opacity="0.75" Color="#261841" />
     </UserControl.Background>
     <UserControl.Resources>
         <Style TargetType="TextBox">

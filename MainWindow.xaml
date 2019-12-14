@@ -46,7 +46,7 @@
             Canvas.Top="375"
             x:Name="NextRunControl" />
         <Viewbox
-            Canvas.Left="1795" Width="125"
+            Canvas.Left="1806" Width="114"
             Canvas.Top="1000" Height="80"
             StretchDirection="DownOnly" Stretch="Uniform">
             <TextBlock
